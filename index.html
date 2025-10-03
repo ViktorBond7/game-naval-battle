@@ -13,12 +13,166 @@
     <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body>
+    <div class="rootCon">
+      <input class="input-test" />
+      <button type="button" class="btn-test">Click me</button>
+      <div class="container-test"></div>
+    </div>
+
     <div>
       <ul class="gallery"></ul>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/basicLightbox/5.0.4/basicLightbox.min.js"></script>
 
-    <script src="./js/gallery.js"></script>
+    <script src="./js/test.js"></script>
   </body>
 </html>
+
+<!-- <!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Виділення символів</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+      }
+      #output {
+        margin-top: 20px;
+        font-size: 24px;
+        user-select: none;
+        position: relative;
+        display: inline-block;
+      }
+      .char {
+        display: inline-block;
+        padding: 4px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background 0.2s;
+        position: relative;
+      }
+      .selected {
+        background: yellow;
+        color: red;
+      }
+      .selection-box {
+        position: absolute;
+        border: 1px dashed blue;
+        background: rgba(0, 0, 255, 0.1);
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h3>Введіть рядок:</h3>
+    <input type="text" id="inputText" />
+    <button id="showBtn">Показати</button>
+
+    <div id="output"></div>
+
+    <script>
+      const input = document.getElementById('inputText');
+      const btn = document.getElementById('showBtn');
+      const output = document.getElementById('output');
+      let selected = new Set();
+
+      btn.addEventListener('click', () => {
+        output.innerHTML = '';
+        selected.clear();
+        const text = input.value;
+        [...text].forEach((ch, idx) => {
+          const span = document.createElement('span');
+          span.textContent = ch;
+          span.classList.add('char');
+          span.dataset.index = idx;
+
+          // --- виділення кліком + Ctrl ---
+          span.addEventListener('click', e => {
+            if (e.ctrlKey) {
+              span.classList.toggle('selected');
+              if (selected.has(span)) selected.delete(span);
+              else selected.add(span);
+            } else {
+              // знімаємо попередні
+              document
+                .querySelectorAll('.selected')
+                .forEach(el => el.classList.remove('selected'));
+              selected.clear();
+              span.classList.add('selected');
+              selected.add(span);
+            }
+          });
+
+          output.appendChild(span);
+        });
+      });
+
+      // --- рамкове виділення ---
+      let selectionBox = null;
+      let startX, startY;
+
+      output.addEventListener('mousedown', e => {
+        if (e.target.classList.contains('char')) return; // якщо натиснули на символ – не починаємо рамку
+        startX = e.offsetX;
+        startY = e.offsetY;
+
+        selectionBox = document.createElement('div');
+        selectionBox.classList.add('selection-box');
+        selectionBox.style.left = `${startX}px`;
+        selectionBox.style.top = `${startY}px`;
+        output.appendChild(selectionBox);
+
+        const onMouseMove = ev => {
+          const x = ev.offsetX;
+          const y = ev.offsetY;
+          const rect = {
+            left: Math.min(startX, x),
+            top: Math.min(startY, y),
+            right: Math.max(startX, x),
+            bottom: Math.max(startY, y),
+          };
+          selectionBox.style.left = rect.left + 'px';
+          selectionBox.style.top = rect.top + 'px';
+          selectionBox.style.width = rect.right - rect.left + 'px';
+          selectionBox.style.height = rect.bottom - rect.top + 'px';
+
+          document.querySelectorAll('#output .char').forEach(ch => {
+            const box = ch.getBoundingClientRect();
+            const outBox = output.getBoundingClientRect();
+            const rel = {
+              left: box.left - outBox.left,
+              top: box.top - outBox.top,
+              right: box.right - outBox.left,
+              bottom: box.bottom - outBox.top,
+            };
+            const overlap = !(
+              rect.right < rel.left ||
+              rect.left > rel.right ||
+              rect.bottom < rel.top ||
+              rect.top > rel.bottom
+            );
+            if (overlap) {
+              ch.classList.add('selected');
+              selected.add(ch);
+            }
+          });
+        };
+
+        const onMouseUp = () => {
+          if (selectionBox) {
+            selectionBox.remove();
+            selectionBox = null;
+          }
+          output.removeEventListener('mousemove', onMouseMove);
+          output.removeEventListener('mouseup', onMouseUp);
+        };
+
+        output.addEventListener('mousemove', onMouseMove);
+        output.addEventListener('mouseup', onMouseUp);
+      });
+    </script>
+  </body>
+</html> -->
